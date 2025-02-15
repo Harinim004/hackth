@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'home.dart'; // Import the home page
 
 void main() {
   runApp(const EmergencySignupApp());
@@ -48,6 +49,12 @@ class _SignupPageState extends State<SignupPage> {
           duration: const Duration(milliseconds: 300),
           curve: Curves.ease,
         );
+      } else {
+        // If it's the last page, navigate to HomePage after submission
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const EmergencyScreen()),
+        );
       }
     }
   }
@@ -79,7 +86,7 @@ class _SignupPageState extends State<SignupPage> {
             _buildPersonalInfoPage(),
             _buildAddressPage(),
             _buildHouseholdMembersPage(),
-            _buildEmergencyContactsPage(),
+            _buildEmergencyContactsPage(), // Last page with Submit button
           ],
         ),
       ),
@@ -152,6 +159,12 @@ class _SignupPageState extends State<SignupPage> {
           }),
           child: const Text('Add Contact'),
         ),
+        const SizedBox(height: 20),
+        ElevatedButton(
+          onPressed: _nextPage, // This will navigate to HomePage after submission
+          style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
+          child: const Text('Submit', style: TextStyle(color: Colors.white)),
+        ),
       ],
     );
   }
@@ -173,7 +186,8 @@ class _SignupPageState extends State<SignupPage> {
                 children: [
                   if (_currentPage > 0)
                     ElevatedButton(onPressed: _previousPage, child: const Text('Back')),
-                  ElevatedButton(onPressed: _nextPage, child: const Text('Next')),
+                  if (_currentPage < 3)
+                    ElevatedButton(onPressed: _nextPage, child: const Text('Next')),
                 ],
               ),
             ],
