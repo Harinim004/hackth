@@ -1,15 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'home.dart'; // Import the home page
-import 'admin.dart'; // Import the admin page
+import 'package:shared_preferences/shared_preferences.dart';
+import 'home.dart';
+import 'admin.dart';
+import 'onboarding_screen.dart';
 
-
-void main() {
-  runApp(const EmergencySignupApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final prefs = await SharedPreferences.getInstance();
+  final isFirstLaunch = prefs.getBool('isFirstLaunch') ?? true;
+  
+  runApp(EmergencySignupApp(isFirstLaunch: isFirstLaunch));
 }
 
 class EmergencySignupApp extends StatelessWidget {
-  const EmergencySignupApp({super.key});
+  final bool isFirstLaunch;
+  
+  const EmergencySignupApp({super.key, required this.isFirstLaunch});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +27,38 @@ class EmergencySignupApp extends StatelessWidget {
         primarySwatch: Colors.red,
         textTheme: GoogleFonts.poppinsTextTheme(),
       ),
-      home: const SignupPage(),
+      home: FutureBuilder<Map<String, bool>>(
+        future: SharedPreferences.getInstance().then((prefs) => {
+          'showOnboarding': prefs.getBool('isFirstLaunch') ?? true,
+          'hasSubmitted': prefs.getBool('hasSubmitted') ?? false,
+        }),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          
+          final showOnboarding = snapshot.data!['showOnboarding']!;
+          final hasSubmitted = snapshot.data!['hasSubmitted']!;
+          
+          if (hasSubmitted) {
+            return const EmergencyScreen();
+          }
+          
+          return showOnboarding
+              ? OnboardingScreen(
+                  onSkip: () async {
+                    final prefs = await SharedPreferences.getInstance();
+                    await prefs.setBool('isFirstLaunch', false);
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(builder: (context) => const SignupPage()),
+                    );
+                  },
+                )
+              : const SignupPage();
+        },
+      ),
+
+
     );
   }
 }
@@ -43,7 +81,7 @@ class _SignupPageState extends State<SignupPage> {
   List<Map<String, String>> householdMembers = [];
   List<Map<String, String>> emergencyContacts = [{'name': '', 'phone': ''}];
 
-  void _nextPage() {
+  Future<void> _nextPage() async {
     if (_formKey.currentState!.validate()) {
       if (_currentPage < 3) {
         _pageController.nextPage(
@@ -51,11 +89,14 @@ class _SignupPageState extends State<SignupPage> {
           curve: Curves.ease,
         );
       } else {
-        // If it's the last page, navigate to HomePage after submission
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setBool('hasSubmitted', true);
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => const EmergencyScreen()),
         );
+
+
       }
     }
   }
@@ -75,7 +116,7 @@ class _SignupPageState extends State<SignupPage> {
       appBar: AppBar(
         title: const Text('Emergency Signup'),
         actions: [
-            IconButton(
+          IconButton(
             icon: const Icon(Icons.admin_panel_settings),
             onPressed: () {
               Navigator.push(
@@ -91,10 +132,8 @@ class _SignupPageState extends State<SignupPage> {
               );
             },
           ),
-
         ],
       ),
-
       body: Form(
         key: _formKey,
         child: PageView(
@@ -109,7 +148,7 @@ class _SignupPageState extends State<SignupPage> {
             _buildPersonalInfoPage(),
             _buildAddressPage(),
             _buildHouseholdMembersPage(),
-            _buildEmergencyContactsPage(), // Last page with Submit button
+            _buildEmergencyContactsPage(),
           ],
         ),
       ),
@@ -184,7 +223,7 @@ class _SignupPageState extends State<SignupPage> {
         ),
         const SizedBox(height: 20),
         ElevatedButton(
-          onPressed: _nextPage, // This will navigate to HomePage after submission
+          onPressed: _nextPage,
           style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
           child: const Text('Submit', style: TextStyle(color: Colors.white)),
         ),

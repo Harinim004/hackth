@@ -15,6 +15,8 @@ dependencies:
   cupertino_icons: ^1.0.8
   google_maps_flutter: ^2.5.0
   google_fonts: ^6.2.0
+  shared_preferences: ^2.2.2
+
 
 dev_dependencies:
   flutter_test:
@@ -25,3 +27,8 @@ flutter:
   uses-material-design: true
   assets:
     - assets/admin_profile.png
+    - assets/onboarding1.png
+    - assets/onboarding2.png
+    - assets/onboarding3.png
+    - assets/onboarding4.png
+    - assets/onboarding5.png
