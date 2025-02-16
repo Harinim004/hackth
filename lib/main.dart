@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'home.dart';
+import 'geolocation_screen.dart';
+
 import 'admin.dart';
 import 'onboarding_screen.dart';
 
@@ -94,10 +96,9 @@ class _SignupPageState extends State<SignupPage> {
         await prefs.setString('userName', personalInfo['name'] ?? 'User');
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => EmergencyScreen(
-            userName: personalInfo['name'] ?? 'User',
-          )),
+          MaterialPageRoute(builder: (context) => GeolocationScreen()),
         );
+
 
 
 

@@ -51,8 +51,12 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
   String selectedAddress = "Home";
   String selectedMessage = "Need Help";
 
-  void triggerEmergencySMS() {
-    final message = "${widget.userName ?? 'User'} is at $selectedAddress, is in a $selectedMessage situation.";
+  void triggerEmergencySMS() async {
+    final prefs = await SharedPreferences.getInstance();
+    final lat = prefs.getString('latitude') ?? 'Unknown';
+    final lon = prefs.getString('longitude') ?? 'Unknown';
+    final message = "${widget.userName ?? 'User'} is at $selectedAddress (Lat: $lat, Lon: $lon), is in a $selectedMessage situation.";
+
     sendSMS("6238952266", message);
   }
 
