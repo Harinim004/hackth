@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'home.dart'; // Import the home page
+import 'admin.dart'; // Import the admin page
+
 
 void main() {
   runApp(const EmergencySignupApp());
@@ -71,7 +72,29 @@ class _SignupPageState extends State<SignupPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Emergency Signup')),
+      appBar: AppBar(
+        title: const Text('Emergency Signup'),
+        actions: [
+            IconButton(
+            icon: const Icon(Icons.admin_panel_settings),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => AdminLoginScreen(
+                  onLoginSuccess: () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => const AdminScreen()),
+                    );
+                  },
+                )),
+              );
+            },
+          ),
+
+        ],
+      ),
+
       body: Form(
         key: _formKey,
         child: PageView(

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'profile.dart'; // Import the Profile Screen
 import 'package:url_launcher/url_launcher.dart';
+import 'admin.dart'; // Import the Admin Screen
+
 import 'dart:ui';
 import 'package:flutter/gestures.dart';
 
@@ -49,7 +51,16 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Emergency Alert"),
-        actions: [IconButton(icon: Icon(Icons.menu), onPressed: () {})],
+        actions: [
+          IconButton(
+            icon: Icon(Icons.menu),
+            onPressed: () {
+              // Menu button with no navigation
+            },
+          )
+
+        ],
+
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
