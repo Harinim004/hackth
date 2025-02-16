@@ -2,16 +2,10 @@ import 'package:flutter/material.dart';
 import 'profile.dart'; // Import the Profile Screen
 import 'package:url_launcher/url_launcher.dart';
 import 'admin.dart'; // Import the Admin Screen
-
-import 'dart:ui';
-import 'package:flutter/gestures.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   runApp(MyApp());
-}
-
-void triggerEmergencySMS() {
-  sendSMS("6238952266", "Emergency Alert! Need immediate assistance.");
 }
 
 Future<void> sendSMS(String phoneNumber, String message) async {
@@ -31,13 +25,24 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: EmergencyScreen(),
+      home: FutureBuilder<String?>(
+        future: SharedPreferences.getInstance().then((prefs) => prefs.getString('userName')),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          return EmergencyScreen(userName: snapshot.data);
+        },
+      ),
     );
   }
 }
 
 class EmergencyScreen extends StatefulWidget {
-  const EmergencyScreen({super.key});
+  final String? userName;
+  
+  const EmergencyScreen({super.key, this.userName});
+
   @override
   _EmergencyScreenState createState() => _EmergencyScreenState();
 }
@@ -46,11 +51,16 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
   String selectedAddress = "Home";
   String selectedMessage = "Need Help";
 
+  void triggerEmergencySMS() {
+    final message = "${widget.userName ?? 'User'} is at $selectedAddress, is in a $selectedMessage situation.";
+    sendSMS("6238952266", message);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Emergency Alert"),
+        title: Text("RAKSHA"),
         actions: [
           IconButton(
             icon: Icon(Icons.menu),
@@ -58,9 +68,7 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
               // Menu button with no navigation
             },
           )
-
         ],
-
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -87,7 +95,7 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
                   ),
                   SizedBox(width: 10),
                   Text(
-                    "Username",
+                    widget.userName ?? 'User',
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                 ],
@@ -102,13 +110,12 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
                 border: OutlineInputBorder(),
               ),
               value: selectedAddress,
-              items:
-                  ["Home", "Office", "School"].map((address) {
-                    return DropdownMenuItem(
-                      value: address,
-                      child: Text(address),
-                    );
-                  }).toList(),
+              items: ["Home", "Office", "School"].map((address) {
+                return DropdownMenuItem(
+                  value: address,
+                  child: Text(address),
+                );
+              }).toList(),
               onChanged: (value) {
                 setState(() {
                   selectedAddress = value!;
@@ -124,10 +131,9 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
                 border: OutlineInputBorder(),
               ),
               value: selectedMessage,
-              items:
-                  ["Need Help", "Emergency", "Medical Assistance"].map((msg) {
-                    return DropdownMenuItem(value: msg, child: Text(msg));
-                  }).toList(),
+              items: ["Need Help", "Emergency", "Medical Assistance"].map((msg) {
+                return DropdownMenuItem(value: msg, child: Text(msg));
+              }).toList(),
               onChanged: (value) {
                 setState(() {
                   selectedMessage = value!;

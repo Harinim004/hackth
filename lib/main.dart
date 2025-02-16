@@ -91,10 +91,14 @@ class _SignupPageState extends State<SignupPage> {
       } else {
         final prefs = await SharedPreferences.getInstance();
         await prefs.setBool('hasSubmitted', true);
+        await prefs.setString('userName', personalInfo['name'] ?? 'User');
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const EmergencyScreen()),
+          MaterialPageRoute(builder: (context) => EmergencyScreen(
+            userName: personalInfo['name'] ?? 'User',
+          )),
         );
+
 
 
       }
