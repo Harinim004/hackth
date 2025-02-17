@@ -17,6 +17,9 @@ dependencies:
   google_fonts: ^6.2.0
   shared_preferences: ^2.2.2
   geolocator: ^13.0.2
+  excel: ^4.0.6
+  path_provider: ^2.1.2
+  path_provider_android: ^2.0.30
 
 
 dev_dependencies:

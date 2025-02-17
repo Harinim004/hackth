@@ -3,7 +3,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'home.dart'; // Import the Home Screen
 
-
 class GeolocationScreen extends StatefulWidget {
   @override
   _GeolocationScreenState createState() => _GeolocationScreenState();
@@ -36,7 +35,11 @@ class _GeolocationScreenState extends State<GeolocationScreen> {
 
       if (permission == LocationPermission.deniedForever) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Location permissions are permanently denied, please enable them in app settings')),
+          const SnackBar(
+            content: Text(
+              'Location permissions are permanently denied, please enable them in app settings',
+            ),
+          ),
         );
         return;
       }
@@ -53,25 +56,23 @@ class _GeolocationScreenState extends State<GeolocationScreen> {
     }
   }
 
-
-
   Future<void> _confirmLocation() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('latitude', latitude);
     await prefs.setString('longitude', longitude);
-    
+
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => EmergencyScreen(userName: 'User')), // Pass the userName if needed
+      MaterialPageRoute(
+        builder: (context) => EmergencyScreen(userName: 'User'),
+      ), // Pass the userName if needed
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Enter Geolocation"),
-      ),
+      appBar: AppBar(title: Text("Enter Geolocation")),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -105,10 +106,7 @@ class _GeolocationScreenState extends State<GeolocationScreen> {
               child: Text("Auto Fill Location"),
             ),
             SizedBox(height: 15),
-            ElevatedButton(
-              onPressed: _confirmLocation,
-              child: Text("Confirm"),
-            ),
+            ElevatedButton(onPressed: _confirmLocation, child: Text("Confirm")),
           ],
         ),
       ),

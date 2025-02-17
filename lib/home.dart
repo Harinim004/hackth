@@ -26,7 +26,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: FutureBuilder<String?>(
-        future: SharedPreferences.getInstance().then((prefs) => prefs.getString('userName')),
+        future: SharedPreferences.getInstance().then(
+          (prefs) => prefs.getString('userName'),
+        ),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -40,7 +42,7 @@ class MyApp extends StatelessWidget {
 
 class EmergencyScreen extends StatefulWidget {
   final String? userName;
-  
+
   const EmergencyScreen({super.key, this.userName});
 
   @override
@@ -55,7 +57,8 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
     final prefs = await SharedPreferences.getInstance();
     final lat = prefs.getString('latitude') ?? 'Unknown';
     final lon = prefs.getString('longitude') ?? 'Unknown';
-    final message = "${widget.userName ?? 'User'} is at $selectedAddress (Lat: $lat, Lon: $lon), is in a $selectedMessage situation.";
+    final message =
+        "${widget.userName ?? 'User'} is at $selectedAddress (Lat: $lat, Lon: $lon), is in a $selectedMessage situation.";
 
     sendSMS("6238952266", message);
   }
@@ -71,7 +74,7 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
             onPressed: () {
               // Menu button with no navigation
             },
-          )
+          ),
         ],
       ),
       body: Padding(
@@ -114,12 +117,13 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
                 border: OutlineInputBorder(),
               ),
               value: selectedAddress,
-              items: ["Home", "Office", "School"].map((address) {
-                return DropdownMenuItem(
-                  value: address,
-                  child: Text(address),
-                );
-              }).toList(),
+              items:
+                  ["Home", "Office", "School"].map((address) {
+                    return DropdownMenuItem(
+                      value: address,
+                      child: Text(address),
+                    );
+                  }).toList(),
               onChanged: (value) {
                 setState(() {
                   selectedAddress = value!;
@@ -135,9 +139,10 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
                 border: OutlineInputBorder(),
               ),
               value: selectedMessage,
-              items: ["Need Help", "Emergency", "Medical Assistance"].map((msg) {
-                return DropdownMenuItem(value: msg, child: Text(msg));
-              }).toList(),
+              items:
+                  ["Need Help", "Emergency", "Medical Assistance"].map((msg) {
+                    return DropdownMenuItem(value: msg, child: Text(msg));
+                  }).toList(),
               onChanged: (value) {
                 setState(() {
                   selectedMessage = value!;
