@@ -28,27 +28,27 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             },
             children: [
               _buildOnboardingPage(
-                image: 'assets/onboarding1.png',
+                image: 'assets/Flux_Dev_i_need_3d_animation_images_for_initializing_of_a_app__0.jpg',
                 title: 'Welcome',
                 description: 'Get started with our app',
               ),
               _buildOnboardingPage(
-                image: 'assets/onboarding2.png',
+                image: 'assets/onboard2.jpeg',
                 title: 'Easy Navigation',
                 description: 'Find what you need quickly',
               ),
               _buildOnboardingPage(
-                image: 'assets/onboarding3.png',
+                image: 'assets/Flux_Dev_i_need_3d_animation_images_for_initializing_of_a_app__2.jpg',
                 title: 'Stay Connected',
                 description: 'Access important features',
               ),
               _buildOnboardingPage(
-                image: 'assets/onboarding4.png',
+                image: 'assets/Flux_Dev_A_series_of_animated_images_showcasing_the_initializa_3.jpeg',
                 title: 'Quick Access',
                 description: 'Get help when you need it',
               ),
               _buildOnboardingPage(
-                image: 'assets/onboarding5.png',
+                image: 'assets/Flux_Dev_i_need_animation_images_for_initialzing_of_a_app_whic_1.jpg',
                 title: 'Ready to Go',
                 description: 'Start using the app now',
               ),

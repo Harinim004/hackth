@@ -119,10 +119,14 @@ class _SignupPageState extends State<SignupPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Emergency Signup'),
+        title: const Text(
+          'Raksha',
+          style: TextStyle(color: Color.fromARGB(255, 209, 209, 209),fontWeight: FontWeight.bold),
+          ),
+        backgroundColor: const Color.fromARGB(255, 216, 6, 48),
         actions: [
           IconButton(
-            icon: const Icon(Icons.admin_panel_settings),
+            icon: const Icon(Icons.admin_panel_settings,color: Color.fromARGB(255, 209, 209, 209),),
             onPressed: () {
               Navigator.push(
                 context,
@@ -224,13 +228,13 @@ class _SignupPageState extends State<SignupPage> {
           onPressed: () => setState(() {
             emergencyContacts.add({'name': '', 'phone': ''});
           }),
-          child: const Text('Add Contact'),
+          child: const Text('Add Contcts', style: TextStyle(color: Color.fromARGB(255, 202, 7, 30))),
         ),
         const SizedBox(height: 20),
         ElevatedButton(
           onPressed: _nextPage,
-          style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
-          child: const Text('Submit', style: TextStyle(color: Colors.white)),
+          style: ElevatedButton.styleFrom(backgroundColor: const Color.fromARGB(255, 202, 7, 30)),
+          child: const Text('Submit', style: TextStyle(color: Color.fromARGB(255, 219, 219, 219))),
         ),
       ],
     );
@@ -252,9 +256,15 @@ class _SignupPageState extends State<SignupPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   if (_currentPage > 0)
-                    ElevatedButton(onPressed: _previousPage, child: const Text('Back')),
+                    ElevatedButton(
+                      onPressed: _previousPage, 
+                      child: const Text('Back', style: TextStyle(color: Color.fromARGB(255, 202, 7, 30))),),
                   if (_currentPage < 3)
-                    ElevatedButton(onPressed: _nextPage, child: const Text('Next')),
+                    ElevatedButton(
+                      onPressed: _nextPage,
+                      style: ElevatedButton.styleFrom(backgroundColor: const Color.fromARGB(255, 202, 7, 30)),
+                      child: const Text('Next', style: TextStyle(color: Color.fromARGB(255, 219, 219, 219))),
+                    )
                 ],
               ),
             ],

@@ -102,6 +102,20 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
 }
 
 
+class Message {
+  final String sender;
+  final String content;
+  final DateTime timestamp;
+  bool isRead;
+
+  Message({
+    required this.sender,
+    required this.content,
+    required this.timestamp,
+    this.isRead = false,
+  });
+}
+
 class MapMarker {
   final String name;
   final LatLng coordinates;
@@ -114,11 +128,26 @@ class MapMarker {
   });
 }
 
+
 class _AdminScreenState extends State<AdminScreen> {
   bool _isLoggedIn = false;
   int _currentIndex = 0;
 
+  final List<Message> demoMessages = [
+    Message(
+      sender: '7559041285',
+      content: 'User is at Home (Lat: 11.254978, Lon: 75.828428), is in a Need Help situation.',
+      timestamp: DateTime.now(),
+    ),
+    Message(
+      sender: '8590145322',
+      content: 'Emergency alert received from user location.',
+      timestamp: DateTime.now().subtract(Duration(minutes: 30)),
+    ),
+  ];
+
   final List<MapMarker> demoMarkers = [
+
 
     MapMarker(
       name: 'Location 1',
@@ -211,10 +240,64 @@ class _AdminScreenState extends State<AdminScreen> {
   }
 
   Widget _buildMessageSection() {
-    return Center(
-      child: Text('Messages section - To be implemented'),
+    return ListView.builder(
+      padding: const EdgeInsets.all(16.0),
+      itemCount: demoMessages.length,
+      itemBuilder: (context, index) {
+        final message = demoMessages[index];
+        return Card(
+          margin: const EdgeInsets.only(bottom: 16.0),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'From: ${message.sender}',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: message.isRead ? Colors.grey : Colors.black,
+                  ),
+                ),
+                const SizedBox(height: 8.0),
+                Text(
+                  message.content,
+                  style: TextStyle(
+                    color: message.isRead ? Colors.grey : Colors.black,
+                  ),
+                ),
+                const SizedBox(height: 8.0),
+                Text(
+                  '${message.timestamp.hour}:${message.timestamp.minute}',
+                  style: TextStyle(
+                    color: Colors.grey,
+                    fontSize: 12.0,
+                  ),
+                ),
+                const SizedBox(height: 8.0),
+                ElevatedButton(
+                  onPressed: () {
+                    _forwardMessage(message);
+                  },
+                  child: const Text('Confirm Situation'),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
+
+  void _forwardMessage(Message message) {
+    // TODO: Implement message forwarding logic
+    final numbers = ["7559041285", "8590145322"];
+    // Send message to each number
+    setState(() {
+      message.isRead = true;
+    });
+  }
+
 
   void _showLocationDetails(MapMarker marker) {
     showDialog(
